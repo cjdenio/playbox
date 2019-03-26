@@ -1,0 +1,58 @@
+<title>Create Cue</title>
+
+<style>
+    body {
+        background-color: rgb(50, 50, 50);
+        color: white;
+        font-family: "Raleway", sans-serif;
+    }
+
+    #content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+    }
+
+    input[type="text"] {
+        background-color: transparent;
+        border-style: none none solid none;
+        border-bottom-color: #00c800;
+        margin: 5px;
+        outline: 0;
+        color: white;
+    }
+
+    button {
+        background-color: #00c800;
+        color: white;
+        border: none;
+    }
+</style>
+<div id="content">
+    <h2>Create a <span style="color: #00c800">cue</span></h3>
+        <input id="cueName" type="text" placeholder="Cue Name" /><br />
+        <button id="chooseFile">Choose Audio File</button><span id="audioFileName"></span><br />
+        Cue color: <input id="cueColor" type="color" value="#00c800" /><br />
+        <button id="createCue">Create Cue</button>
+</div>
+
+<script>
+    const { dialog } = require('electron').remote;
+    const ipc = require('electron').ipcRenderer;
+    var audioFile;
+    document.getElementById("chooseFile").addEventListener("click", function () {
+        dialog.showOpenDialog(function (args) {
+            audioFile = args[0];
+            var audioFileName = args[0].split("\\");
+            document.getElementById("audioFileName").innerText = audioFileName[audioFileName.length - 1];
+        });
+    });
+
+    document.getElementById("createCue").addEventListener("click", function () {
+        var cueName = document.getElementById("cueName").value;
+        var cueColor = document.getElementById("cueColor").value;
+        ipc.send('create-cue', { cueName: cueName, audioFile: audioFile, cueColor: cueColor });
+    });
+</script>
