@@ -6,27 +6,39 @@ let stageDisplay;
 let createCueWindow;
 
 function createMainWindow() {
-    mainWindow = new BrowserWindow({ width: 800, height: 600, icon: "img/icon.png" });
+    mainWindow = new BrowserWindow({ width: 800, height: 600, icon: "img/icon.png", show: false, backgroundColor: "#323232" });
     mainWindow.loadURL(`file://${__dirname}/index.html`);
     mainWindow.on('closed', () => {
         mainWindow = null;
         app.quit();
     });
+    mainWindow.on('ready-to-show', () => {
+        mainWindow.show();
+        mainWindow.focus();
+    });
 }
 
 function createCreateCueWindow() {
-    createCueWindow = new BrowserWindow({ width: 400, height: 300, autoHideMenuBar: true, icon: "img/icon.png", resizable: false, parent: mainWindow, modal: true });
+    createCueWindow = new BrowserWindow({ width: 400, height: 300, autoHideMenuBar: true, icon: "img/icon.png", resizable: false, parent: mainWindow, modal: true, show: false });
     createCueWindow.loadURL(`file://${__dirname}/windows/createCueWindow.html`);
     createCueWindow.on('closed', () => {
         createCueWindow = null;
     });
+    createCueWindow.on('ready-to-show', () => {
+        createCueWindow.show();
+        createCueWindow.focus();
+    });
 }
 
 function createStageDisplay() {
-    stageDisplay = new BrowserWindow({ width: 600, height: 300, icon: "img/icon.png", autoHideMenuBar: true });
+    stageDisplay = new BrowserWindow({ width: 600, height: 300, icon: "img/icon.png", autoHideMenuBar: true, show: false });
     stageDisplay.loadURL(`file://${__dirname}/windows/stageDisplay.html`);
     stageDisplay.on('closed', () => {
         stageDisplay = null;
+    });
+    stageDisplay.on('ready-to-show', () => {
+        stageDisplay.show();
+        stageDisplay.focus();
     });
 }
 var menu = Menu.buildFromTemplate([
@@ -36,7 +48,9 @@ var menu = Menu.buildFromTemplate([
             {
                 label: "Create Cue",
                 click() {
-                    createCreateCueWindow();
+                    if (!createCueWindow) {
+                        createCreateCueWindow();
+                    }
                 },
                 accelerator: "CmdOrCtrl+N"
             },
@@ -103,6 +117,7 @@ ipc.on('create-cue', (event, args) => {
     console.log(args.cueColor);
     mainWindow.webContents.send('create-cue', args);
     createCueWindow.hide();
+    mainWindow.focus();
 });
 
 ipc.on('update-stage-display', (event, args) => {
