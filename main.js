@@ -116,7 +116,7 @@ ipc.on('create-cue', (event, args) => {
     console.log(args.audioFile);
     console.log(args.cueColor);
     mainWindow.webContents.send('create-cue', args);
-    createCueWindow.hide();
+    createCueWindow.close();
     mainWindow.focus();
 });
 

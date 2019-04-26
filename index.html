@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <title>Playbox</title>
+<link rel="stylesheet" href="css/fontawesome/css/all.css" />
 <style>
     body {
         background-color: rgb(50, 50, 50);
@@ -54,6 +55,16 @@
         color: white;
         cursor: pointer;
     }
+
+    .operation {
+        font-size: 20px;
+        margin: 5px;
+    }
+
+    * {
+        -webkit-user-select: none;
+        -webkit-user-drag: none;
+    }
 </style>
 <div id="audio-container">
     <img src="img/logo.png" width="200px" style="margin: 5px" />
@@ -83,7 +94,8 @@
         class="content">Drama<br />More Than Conqerors</span></div> -->
 <div id="playbox-container"></div>
 <div id="operation-container">
-    <span id="delete">Delete</span>
+    <span class="operation" id="delete"><i class="fas fa-trash-alt"></i></span>
+    <span class="operation" id="edit"><i class="fas fa-edit"></i></span>
     <!-- <button id="running">Running</button> -->
 </div>
 
@@ -116,13 +128,13 @@
     audio.onpause = function () {
         //button.classList.remove('active');
 
-        ipc.send('update-stage-display', { isRunning: false })
+        ipc.send('update-stage-display', { isRunning: false });
     }
 
     audio.onended = function () {
         //button.classList.remove('active');
         //button.classList.add('inactive');
-        ipc.send('update-stage-display', { isRunning: false })
+        ipc.send('update-stage-display', { isRunning: false });
 
     }
 
