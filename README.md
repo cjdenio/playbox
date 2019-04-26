@@ -1,4 +1,4 @@
-![Playbox logo](https://github.com/cjdenio/playbox/blob/master/img/logo_dark_small.png)
+![Playbox logo](https://raw.githubusercontent.com/cjdenio/playbox/master/img/logo_dark_small.png)
 # Playbox
 
 ![Travis (.org)](https://img.shields.io/travis/cjdenio/playbox.svg)
