@@ -1,4 +1,5 @@
 # Playbox
+![GitHub All Releases](https://img.shields.io/github/downloads/cjdenio/playbox/total.svg)
 Playbox is a system for playing back audio during live productions.
 
 ## Get Playbox
