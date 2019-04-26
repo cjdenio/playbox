@@ -4,6 +4,8 @@
 <style>
     body {
         background-color: rgb(50, 50, 50);
+        transition-duration: 300ms;
+        transition-property: background-color;
     }
 
     .inactive {
@@ -106,8 +108,10 @@
     var audio = document.querySelector("audio#audio");
     var button;
     var deleteButton = document.getElementById("delete");
+    var editButton = document.getElementById("edit");
 
     var deleteMode = false;
+    var editMode = false;
 
     function playTrack(trackName) {
         audio.src = trackName;
@@ -141,16 +145,20 @@
     ipc.on('create-cue', function (event, args) {
         var div = document.createElement('div');
         div.classList.add('playbox');
-        div.id = document.querySelectorAll("div.playbox").length + 1;
+        div.id = args.id;
         div.style.backgroundColor = args.cueColor;
         div.style.opacity = 0;
         div.onclick = function () {
             if (deleteMode) {
                 if (dialog.showMessageBox({ message: "Are you sure you want to delete this cue?", buttons: ["Yes", "Cancel"] }) == 0) {
+                    ipc.send('delete-cue', { id: this.id })
                     this.remove();
                 }
                 toggleDeleteMode();
 
+            }
+            else if (editMode) {
+                ipc.send('edit-cue', { id: this.id });
             }
 
             else {
@@ -183,10 +191,28 @@
             if (editMode) {
                 toggleEditMode();
             }
+            document.body.style.backgroundColor = "#990000";
         }
         else {
             deleteButton.style.color = "#FFFFFF";
+            document.body.style.backgroundColor = "rgb(50, 50, 50)";
             deleteMode = false;
+        }
+    }
+
+    function toggleEditMode() {
+        if (!editMode) {
+            editButton.style.color = "#00FF00";
+            editMode = true;
+            if (deleteMode) {
+                toggleDeleteMode();
+            }
+            document.body.style.backgroundColor = "#323232";
+        }
+        else {
+            editButton.style.color = "#FFFFFF";
+            document.body.style.backgroundColor = "rgb(50, 50, 50)";
+            editMode = false;
         }
     }
 
@@ -194,7 +220,9 @@
         toggleDeleteMode();
     });
 
-    document.getElementById("running").addEventListener("click", function () {
-        ipc.send('update-stage-display', { isRunning: true });
+    editButton.addEventListener("click", toggleEditMode);
+
+    ipc.on('actually-edit-cue', function (event, args) {
+        document.getElementById(args.id).children[0].innerText = args.name;
     });
 </script>

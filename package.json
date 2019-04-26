@@ -12,6 +12,21 @@
         "start": "electron ."
     },
     "build": {
+        "win": {
+            "target": "nsis"
+        },
+        "mac": {
+            "target": [
+                "dmg",
+                "pkg"
+            ]
+        },
+        "linux": {
+            "target": [
+                "appImage",
+                "deb"
+            ]
+        },
         "nsis": {
             "oneClick": false,
             "allowToChangeInstallationDirectory": true
