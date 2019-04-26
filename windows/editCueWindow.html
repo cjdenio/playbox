@@ -81,7 +81,9 @@
     const path = require('path');
 
     var id;
-    /*var audioFile;
+
+
+    var audioFile;
     document.getElementById("chooseFile").addEventListener("click", function () {
         dialog.showOpenDialog(function (args) {
             audioFile = args[0];
@@ -89,18 +91,18 @@
         });
     });
 
-    document.getElementById("createCue").addEventListener("click", function () {
-        var cueName = document.getElementById("cueName").value;
-        var cueColor = document.getElementById("cueColor").value;
-        ipc.send('create-cue', { cueName: cueName, audioFile: audioFile, cueColor: cueColor });
-    });*/
+
     document.getElementById("save").addEventListener("click", function () {
         var cueName = document.getElementById("cueName").value;
-        ipc.send('edit-cue-save', { name: cueName, id: id });
+        var color = document.getElementById("cueColor").value;
+        ipc.send('edit-cue-save', { name: cueName, id: id, color: color, audioFile: audioFile });
     });
 
     ipc.on('edit-cue-data', function (event, args) {
         document.getElementById("cueName").value = args.name;
         id = args.id;
+        document.getElementById("cueColor").value = args.color;
+        document.getElementById("audioFileName").innerText = path.basename(args.audioFile);
+        audioFile = args.audioFile;
     });
 </script>

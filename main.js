@@ -186,6 +186,8 @@ ipc.on('edit-cue-save', (event, args) => {
     for (i = 0; i < cueData.cues.length; i++) {
         if (cueData.cues[i].id == args.id) {
             cueData.cues[i].name = args.name;
+            cueData.cues[i].audioFile = args.audioFile;
+            cueData.cues[i].color = args.color;
             break;
         }
     }
