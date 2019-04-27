@@ -28,4 +28,4 @@ Convinced yet? You can download Playbox over at yonder [Releases](https://github
 
 ## Documentation
 
-Documentation is available over at the [Wiki](https://github.com/cjdenio/playboc/wiki)
+Documentation is available over at the [Wiki](https://github.com/cjdenio/playbox/wiki)
