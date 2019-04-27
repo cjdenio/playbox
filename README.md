@@ -26,10 +26,6 @@ Playbox is a system for playing back audio during live productions.
 
 Convinced yet? You can download Playbox over at yonder [Releases](https://github.com/cjdenio/playbox/releases/latest) page. 
 
-## Get Playbox
-
-Convinced yet? You can download Playbox over at yonder [Releases](https://github.com/cjdenio/playbox/releases/latest) page.  
-
 ## Documentation
 
 Documentation is available over at the [Wiki](https://github.com/cjdenio/playboc/wiki)
