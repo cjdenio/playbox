@@ -1,21 +1,22 @@
 <!DOCTYPE html>
 <title>Playbox</title>
 <link rel="stylesheet" href="css/fontawesome/css/all.css" />
+<link rel="stylesheet" href="css/fonts.css" />
 <style>
     body {
         background-color: rgb(50, 50, 50);
         transition-duration: 300ms;
         transition-property: background-color;
     }
-
+    
     .inactive {
         background-color: rgb(150, 150, 150) !important;
     }
-
+    
     .active {
         background-color: red !important;
     }
-
+    
     div.playbox {
         background-color: rgb(0, 200, 0);
         color: white;
@@ -27,19 +28,18 @@
         float: left;
         transition: all 300ms;
         text-align: center;
-
         padding: 5px;
         margin: 5px;
     }
-
+    
     div.playbox:hover {
         background-color: rgb(0, 150, 0);
     }
-
+    
     div#audio-container {
         text-align: center;
     }
-
+    
     span.content {
         position: relative;
         top: 50%;
@@ -48,7 +48,7 @@
         margin: 0;
         display: block;
     }
-
+    
     #operation-container {
         position: fixed;
         right: 10px;
@@ -57,12 +57,12 @@
         color: white;
         cursor: pointer;
     }
-
+    
     .operation {
         font-size: 20px;
         margin: 5px;
     }
-
+    
     * {
         -webkit-user-select: none;
         -webkit-user-drag: none;
@@ -102,7 +102,9 @@
 </div>
 
 <script>
-    const { dialog } = require('electron').remote;
+    const {
+        dialog
+    } = require('electron').remote;
     const ipc = require('electron').ipcRenderer;
 
     var audio = document.querySelector("audio#audio");
@@ -123,45 +125,56 @@
         button = element; */
     }
 
-    audio.onplay = function () {
+    audio.onplay = function() {
         //button.classList.add('active');
 
-        ipc.send('update-stage-display', { isRunning: true, cueName: button.innerText });
+        ipc.send('update-stage-display', {
+            isRunning: true,
+            cueName: button.innerText
+        });
     };
 
-    audio.onpause = function () {
+    audio.onpause = function() {
         //button.classList.remove('active');
 
-        ipc.send('update-stage-display', { isRunning: false });
+        ipc.send('update-stage-display', {
+            isRunning: false
+        });
     }
 
-    audio.onended = function () {
+    audio.onended = function() {
         //button.classList.remove('active');
         //button.classList.add('inactive');
-        ipc.send('update-stage-display', { isRunning: false });
+        ipc.send('update-stage-display', {
+            isRunning: false
+        });
 
     }
 
-    ipc.on('create-cue', function (event, args) {
+    ipc.on('create-cue', function(event, args) {
         var div = document.createElement('div');
         div.classList.add('playbox');
         div.id = args.id;
         div.style.backgroundColor = args.cueColor;
         div.style.opacity = 0;
-        div.onclick = function () {
+        div.onclick = function() {
             if (deleteMode) {
-                if (dialog.showMessageBox({ message: "Are you sure you want to delete this cue?", buttons: ["Yes", "Cancel"] }) == 0) {
-                    ipc.send('delete-cue', { id: this.id })
+                if (dialog.showMessageBox({
+                        message: "Are you sure you want to delete this cue?",
+                        buttons: ["Yes", "Cancel"]
+                    }) == 0) {
+                    ipc.send('delete-cue', {
+                        id: this.id
+                    })
                     this.remove();
                 }
                 toggleDeleteMode();
 
-            }
-            else if (editMode) {
-                ipc.send('edit-cue', { id: this.id });
-            }
-
-            else {
+            } else if (editMode) {
+                ipc.send('edit-cue', {
+                    id: this.id
+                });
+            } else {
                 playTrack(args.audioFile);
                 button = this;
             }
@@ -174,7 +187,7 @@
         div.appendChild(span);
         document.getElementById("playbox-container").appendChild(div);
         var steps = 0;
-        var timer = setInterval(function () {
+        var timer = setInterval(function() {
             steps++;
             div.style.opacity = 0.2 * steps;
             if (steps >= 5) {
@@ -192,8 +205,7 @@
                 toggleEditMode();
             }
             document.body.style.backgroundColor = "#990000";
-        }
-        else {
+        } else {
             deleteButton.style.color = "#FFFFFF";
             document.body.style.backgroundColor = "rgb(50, 50, 50)";
             deleteMode = false;
@@ -208,37 +220,40 @@
                 toggleDeleteMode();
             }
             document.body.style.backgroundColor = "#323232";
-        }
-        else {
+        } else {
             editButton.style.color = "#FFFFFF";
             document.body.style.backgroundColor = "rgb(50, 50, 50)";
             editMode = false;
         }
     }
 
-    deleteButton.addEventListener("click", function () {
+    deleteButton.addEventListener("click", function() {
         toggleDeleteMode();
     });
 
     editButton.addEventListener("click", toggleEditMode);
 
-    ipc.on('actually-edit-cue', function (event, args) {
+    ipc.on('actually-edit-cue', function(event, args) {
         document.getElementById(args.id).children[0].innerText = args.name;
         document.getElementById(args.id).style.backgroundColor = args.color;
-        document.getElementById(args.id).onclick = function () {
+        document.getElementById(args.id).onclick = function() {
             if (deleteMode) {
-                if (dialog.showMessageBox({ message: "Are you sure you want to delete this cue?", buttons: ["Yes", "Cancel"] }) == 0) {
-                    ipc.send('delete-cue', { id: this.id });
+                if (dialog.showMessageBox({
+                        message: "Are you sure you want to delete this cue?",
+                        buttons: ["Yes", "Cancel"]
+                    }) == 0) {
+                    ipc.send('delete-cue', {
+                        id: this.id
+                    });
                     this.remove();
                 }
                 toggleDeleteMode();
 
-            }
-            else if (editMode) {
-                ipc.send('edit-cue', { id: this.id });
-            }
-
-            else {
+            } else if (editMode) {
+                ipc.send('edit-cue', {
+                    id: this.id
+                });
+            } else {
                 playTrack(args.audioFile);
                 button = this;
             }
