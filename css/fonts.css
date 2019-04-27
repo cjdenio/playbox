@@ -1,23 +1,23 @@
 @font-face {
     font-family: "Raleway";
-    src: url(css/fonts/raleway/Raleway-Regular.ttf);
+    src: url(fonts/raleway/Raleway-Regular.ttf);
     font-weight: normal;
 }
 
 @font-face {
     font-family: "Raleway";
-    src: url(css/fonts/raleway/Raleway-Bold.ttf);
+    src: url(fonts/raleway/Raleway-Bold.ttf);
     font-weight: bold;
 }
 
 @font-face {
     font-family: "Roboto";
-    src: url(css/fonts/roboto/Roboto-Regular.ttf);
+    src: url(fonts/roboto/Roboto-Regular.ttf);
     font-weight: normal;
 }
 
 @font-face {
     font-family: "Roboto";
-    src: url(css/fonts/roboto/Roboto-Bold.ttf);
+    src: url(fonts/roboto/Roboto-Bold.ttf);
     font-weight: bold;
 }

@@ -115,6 +115,46 @@
     var deleteMode = false;
     var editMode = false;
 
+    ipc.on('cueData', (event, args) => {
+        for (i = 0; i < args.cues.length; i++) {
+            const track = args.cues[i].audioFile;
+
+            var div = document.createElement('div');
+            div.classList.add('playbox');
+            div.id = args.cues[i].id;
+            div.style.backgroundColor = args.cues[i].color;
+            div.onclick = function() {
+                if (deleteMode) {
+                    if (dialog.showMessageBox({
+                            message: "Are you sure you want to delete this cue?",
+                            buttons: ["Yes", "Cancel"]
+                        }) == 0) {
+                        ipc.send('delete-cue', {
+                            id: this.id
+                        })
+                        this.remove();
+                    }
+                    toggleDeleteMode();
+
+                } else if (editMode) {
+                    ipc.send('edit-cue', {
+                        id: this.id
+                    });
+                } else {
+                    playTrack(track);
+                    button = this;
+                }
+            };
+
+            var span = document.createElement('span');
+            span.classList.add('content');
+            span.innerText = args.cues[i].name;
+
+            div.appendChild(span);
+            document.getElementById("playbox-container").appendChild(div);
+        }
+    });
+
     function playTrack(trackName) {
         audio.src = trackName;
         audio.play();

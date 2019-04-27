@@ -1,5 +1,6 @@
 const { app, BrowserWindow, Menu, dialog } = require('electron');
 const ipc = require('electron').ipcMain;
+const storage = require('electron-json-storage');
 
 let mainWindow;
 let stageDisplay;
@@ -8,8 +9,26 @@ let editCueWindow;
 
 let cueData = { cues: [] };
 
+// Initilize storage
+storage.has('playbox', (error, hasKey) => {
+    if (!hasKey) {
+        storage.set('playbox', cueData, error => {
+            if (error) {
+                throw error;
+            }
+        });
+    } else {
+        storage.get('playbox', (error, data) => {
+            cueData = data;
+            if (error) {
+                throw error;
+            }
+        });
+    }
+});
+
 function createMainWindow() {
-    mainWindow = new BrowserWindow({ width: 800, height: 600, icon: "img/icon.png", show: false, backgroundColor: "#323232" });
+    mainWindow = new BrowserWindow({ width: 800, height: 600, icon: "img/icon.png", show: false, backgroundColor: "#323232", webPreferences: { nodeIntegration: true } });
     mainWindow.loadURL(`file://${__dirname}/index.html`);
     mainWindow.on('closed', () => {
         mainWindow = null;
@@ -19,10 +38,13 @@ function createMainWindow() {
         mainWindow.show();
         mainWindow.focus();
     });
+    mainWindow.webContents.once('dom-ready', () => {
+        mainWindow.webContents.send('cueData', cueData);
+    });
 }
 
 function createCreateCueWindow() {
-    createCueWindow = new BrowserWindow({ width: 400, height: 300, autoHideMenuBar: true, icon: "img/icon.png", resizable: false, parent: mainWindow, modal: true, show: false });
+    createCueWindow = new BrowserWindow({ width: 400, height: 300, autoHideMenuBar: true, icon: "img/icon.png", resizable: false, parent: mainWindow, modal: true, show: false, webPreferences: { nodeIntegration: true } });
     createCueWindow.loadURL(`file://${__dirname}/windows/createCueWindow.html`);
     createCueWindow.on('closed', () => {
         createCueWindow = null;
@@ -34,7 +56,7 @@ function createCreateCueWindow() {
 }
 
 function createStageDisplay() {
-    stageDisplay = new BrowserWindow({ width: 600, height: 300, icon: "img/icon.png", autoHideMenuBar: true, show: false });
+    stageDisplay = new BrowserWindow({ width: 600, height: 300, icon: "img/icon.png", autoHideMenuBar: true, show: false, webPreferences: { nodeIntegration: true } });
     stageDisplay.loadURL(`file://${__dirname}/windows/stageDisplay.html`);
     stageDisplay.on('closed', () => {
         stageDisplay = null;
@@ -44,8 +66,9 @@ function createStageDisplay() {
         stageDisplay.focus();
     });
 }
+
 function createEditCueWindow() {
-    editCueWindow = new BrowserWindow({ width: 400, height: 300, autoHideMenuBar: true, icon: "img/icon.png", resizable: false, parent: mainWindow, modal: true, show: false });
+    editCueWindow = new BrowserWindow({ width: 400, height: 300, autoHideMenuBar: true, icon: "img/icon.png", resizable: false, parent: mainWindow, modal: true, show: false, webPreferences: { nodeIntegration: true } });
     editCueWindow.loadURL(`file://${__dirname}/windows/editCueWindow.html`);
     editCueWindow.on('closed', () => {
         editCueWindow = null;
@@ -55,29 +78,28 @@ function createEditCueWindow() {
         editCueWindow.focus();
     });
 }
-var menu = Menu.buildFromTemplate([
+var menu = Menu.buildFromTemplate([{
+        label: "Playbox",
+        submenu: [{
+            role: "quit",
+            accelerator: "CmdOrCtrl+Q"
+        }]
+    },
     {
         label: "File",
-        submenu: [
-            {
-                label: "Create Cue",
-                click() {
-                    if (!createCueWindow) {
-                        createCreateCueWindow();
-                    }
-                },
-                accelerator: "CmdOrCtrl+N"
+        submenu: [{
+            label: "Create Cue",
+            click() {
+                if (!createCueWindow) {
+                    createCreateCueWindow();
+                }
             },
-            {
-                role: "quit",
-                accelerator: "CmdOrCtrl+Q"
-            }
-        ]
+            accelerator: "CmdOrCtrl+N"
+        }, ]
     },
     {
         label: "View",
-        submenu: [
-            {
+        submenu: [{
                 role: "toggledevtools"
             },
             {
@@ -87,8 +109,7 @@ var menu = Menu.buildFromTemplate([
                     let currentWindow = BrowserWindow.getFocusedWindow();
                     if (currentWindow.isFullScreen()) {
                         currentWindow.setFullScreen(false);
-                    }
-                    else {
+                    } else {
                         currentWindow.setFullScreen(true);
                     }
                 }
@@ -99,11 +120,11 @@ var menu = Menu.buildFromTemplate([
                 click() {
                     if (!stageDisplay) {
                         createStageDisplay();
-                    }
-                    else {
+                    } else {
                         stageDisplay.focus();
                     }
-                }
+                },
+                accelerator: "CmdOrCtrl+1"
             }
         ]
     }
@@ -120,8 +141,7 @@ app.on('window-all-closed', () => {
 ipc.on('show-stage-display', (event, args) => {
     if (!stageDisplay) {
         createStageDisplay();
-    }
-    else {
+    } else {
         stageDisplay.focus();
     }
 })
@@ -138,6 +158,12 @@ ipc.on('create-cue', (event, args) => {
     mainWindow.focus();
 
     cueData.cues.push({ id: cueId, name: args.cueName, audioFile: args.audioFile, color: args.cueColor });
+
+    storage.set('playbox', cueData, error => {
+        if (error) {
+            throw error;
+        }
+    });
 
     console.log(cueData);
 });
@@ -174,6 +200,11 @@ ipc.on('delete-cue', (event, args) => {
             break;
         }
     }
+    storage.set('playbox', cueData, error => {
+        if (error) {
+            throw error;
+        }
+    });
 });
 
 ipc.on('edit-cue-save', (event, args) => {
@@ -191,6 +222,12 @@ ipc.on('edit-cue-save', (event, args) => {
             break;
         }
     }
+
+    storage.set('playbox', cueData, error => {
+        if (error) {
+            throw error;
+        }
+    });
 
     mainWindow.webContents.send('actually-edit-cue', args);
 
