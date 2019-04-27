@@ -9,9 +9,18 @@
 
 Playbox is a system for playing back audio during live productions.
 
+### Features
+- Super simple interface
+- Cues can be any color
+- Stage display allows performers to see playing cue
+- It's **free**, so what more can you ask for?
+- Did I mention it's **cross-platform** too? It works on Windows, MacOS, and pretty much any Linux distribution.
+- And it's **open-source**, so you aspiring developers can play around with it.
+- It has a *sweet* logo
+
 ## Get Playbox
 
-You can download installers over at the [Releases](https://github.com/cjdenio/playbox/releases/latest) page. 
+Convinced yet? You can download Playbox over at yonder [Releases](https://github.com/cjdenio/playbox/releases/latest) page. 
 
 ## Build it
 
