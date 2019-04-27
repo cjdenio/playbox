@@ -5,6 +5,7 @@
 [![GitHub All Releases](https://img.shields.io/github/downloads/cjdenio/playbox/total.svg)](https://github.com/cjdenio/playbox/releases)
 [![GitHub issues](https://img.shields.io/github/issues/cjdenio/playbox.svg)](https://github.com/cjdenio/playbox/issues)
 [![GitHub tag (latest SemVer)](https://img.shields.io/github/tag/cjdenio/playbox.svg?label=version)](https://github.com/cjdenio/playbox/releases/latest)
+[![GitHub](https://img.shields.io/github/license/cjdenio/playbox.svg)](https://github.com/cjdenio/playbox/blob/master/LICENSE)
 
 Playbox is a system for playing back audio during live productions.
 
