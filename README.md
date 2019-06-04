@@ -10,8 +10,6 @@
 Playbox is a system for playing back audio during live productions.
 
 ![Screenshot 1](https://github.com/cjdenio/playbox/wiki/img/playbox-1.jpg)
-![Screenshot 2](https://github.com/cjdenio/playbox/wiki/img/playbox-3.jpg)
-![Screenshot 4](https://github.com/cjdenio/playbox/wiki/img/playbox-4.jpg)
 
 ### Features
 - Super simple interface
@@ -29,3 +27,10 @@ Convinced yet? You can download Playbox over at yonder [Releases](https://github
 ## Documentation
 
 Documentation is available over at the [Wiki](https://github.com/cjdenio/playbox/wiki)
+
+## Request a feature (or report a bug)
+
+Do you have a great idea that could make Playbox even better? Go submit it over [here](https://github.com/cjdenio/playbox/issues/new)!
+
+![Screenshot 2](https://github.com/cjdenio/playbox/wiki/img/playbox-3.jpg)
+![Screenshot 4](https://github.com/cjdenio/playbox/wiki/img/playbox-4.jpg)
