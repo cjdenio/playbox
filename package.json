@@ -37,8 +37,8 @@
         "audio"
     ],
     "author": {
-        "name":"Caleb Denio",
-        "email":"cdenio@fusion6763.org"
+        "name": "Caleb Denio",
+        "email": "cdenio@fusion6763.org"
     },
     "license": "GPL-3.0",
     "devDependencies": {
