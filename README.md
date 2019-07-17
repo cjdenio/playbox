@@ -11,6 +11,9 @@ Playbox is a system for playing back audio during live productions.
 
 ![Screenshot 1](https://github.com/cjdenio/playbox/wiki/img/playbox-1.jpg)
 
+## Donate
+Feel free to donate over here: https://donorbox.org/denio-software
+
 ### Features
 - Super simple interface
 - Cues can be any color
